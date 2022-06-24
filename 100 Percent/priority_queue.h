@@ -45,21 +45,30 @@ public:
    {
    }
    priority_queue(const priority_queue &  rhs)  
-   { 
+   {
+       container = rhs.container;
    }
    priority_queue(priority_queue && rhs)  
-   { 
+   {
+       container = std::move(rhs.container);
    }
    template <class Iterator>
    priority_queue(Iterator first, Iterator last) 
    {
+       container.reserve(last-first);
+       for(auto it = first; it!= last; it++)
+           container.push_back(*it);
+       
    }
    explicit priority_queue (custom::vector<T> && rhs) 
    {
+       container = std::move(rhs);
    }
    explicit priority_queue (custom::vector<T>& rhs)
    {
+       container = rhs;
    }
+    
   ~priority_queue() {}
 
    //
@@ -83,11 +92,11 @@ public:
    //
    size_t size()  const 
    { 
-      return 99;   
+      return container.size();
    }
    bool empty() const 
    { 
-      return false;  
+      return container.size() == 0 ;
    }
    
 private:
@@ -105,7 +114,7 @@ private:
 template <class T>
 const T & priority_queue <T> :: top() const
 {
-   return *(new T);
+    return container.front();
 }
 
 /**********************************************
@@ -115,6 +124,7 @@ const T & priority_queue <T> :: top() const
 template <class T>
 void priority_queue <T> :: pop()
 {
+    
 }
 
 /*****************************************
@@ -124,6 +134,15 @@ void priority_queue <T> :: pop()
 template <class T>
 void priority_queue <T> :: push(const T & t)
 {
+    container.push_back(t);
+    std:: cout << container.size() << std::endl;
+    size_t parentIndex = (size_t) (container.size()-1)/ 2;
+    while(parentIndex !=0)
+    {
+        percolateDown(parentIndex);
+        parentIndex = (size_t) parentIndex / 2;
+    }
+
 }
 template <class T>
 void priority_queue <T> :: push(T && t)
@@ -139,7 +158,30 @@ void priority_queue <T> :: push(T && t)
 template <class T>
 bool priority_queue <T> :: percolateDown(size_t indexHeap)
 {
-   return false;
+    bool  valueChanged = false;
+    if(indexHeap >= container.size()-1)
+        return 0;
+    
+    size_t childLeft = 2 * indexHeap +1 ;
+    size_t childRight = childLeft + 2;
+    
+    size_t indexBigger = 0;
+    // Find Bigger Child
+    
+    if(container[childLeft] > container[childRight])
+        indexBigger = childLeft;
+    else
+        indexBigger = childRight;
+    
+    if(container[indexHeap] < container[indexBigger])
+    {
+        std:: cout << container[indexHeap] << container[indexBigger] <<std:: endl;
+        std:: swap(container[indexHeap], container[indexBigger]);
+        valueChanged = true;
+        percolateDown(indexBigger);
+    }
+      
+    return valueChanged;
 }
 
 
@@ -151,6 +193,7 @@ template <class T>
 inline void swap(custom::priority_queue <T>& lhs,
                  custom::priority_queue <T>& rhs)
 {
+    lhs.container.swap(rhs.container);
 }
 
 };

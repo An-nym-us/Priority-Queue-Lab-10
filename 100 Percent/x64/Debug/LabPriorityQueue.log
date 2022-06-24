@@ -1,0 +1,6 @@
+﻿  testPriorityQueue.cpp
+C:\Users\Jonathans Desktop\Documents\Schoolwork\DESIGNING data strucs\Lab 09\Priority-Queue-Lab-10\100 Percent\testVector.h(136,1): warning C4312: 'type cast': conversion from 'unsigned int' to 'int *' of greater size
+C:\Users\Jonathans Desktop\Documents\Schoolwork\DESIGNING data strucs\Lab 09\Priority-Queue-Lab-10\100 Percent\testVector.h(151,1): warning C4312: 'type cast': conversion from 'unsigned int' to 'int *' of greater size
+C:\Users\Jonathans Desktop\Documents\Schoolwork\DESIGNING data strucs\Lab 09\Priority-Queue-Lab-10\100 Percent\testVector.h(167,1): warning C4312: 'type cast': conversion from 'unsigned int' to 'int *' of greater size
+C:\Users\Jonathans Desktop\Documents\Schoolwork\DESIGNING data strucs\Lab 09\Priority-Queue-Lab-10\100 Percent\testVector.h(201,1): warning C4312: 'type cast': conversion from 'unsigned int' to 'int *' of greater size
+  LabPriorityQueue.vcxproj -> C:\Users\Jonathans Desktop\Documents\Schoolwork\DESIGNING data strucs\Lab 09\Priority-Queue-Lab-10\100 Percent\x64\Debug\LabPriorityQueue.exe

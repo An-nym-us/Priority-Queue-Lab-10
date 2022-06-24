@@ -162,25 +162,34 @@ bool priority_queue <T> :: percolateDown(size_t indexHeap)
     if(indexHeap >= container.size()-1)
         return 0;
     
-    size_t childLeft = 2 * indexHeap +1 ;
-    size_t childRight = childLeft + 2;
+
+
+    size_t childLeft = indexHeap * 2;
+    size_t childRight = indexHeap * 2 + 1;
     
+    childLeft -= 1;
+    childRight -= 1;
+
     size_t indexBigger = 0;
     // Find Bigger Child
     
-    if(container[childLeft] > container[childRight])
-        indexBigger = childLeft;
-    else
-        indexBigger = childRight;
-    
-    if(container[indexHeap] < container[indexBigger])
+
+    if (container[childLeft] < container[childRight])
     {
-        std:: cout << container[indexHeap] << container[indexBigger] <<std:: endl;
-        std:: swap(container[indexHeap], container[indexBigger]);
-        valueChanged = true;
-        percolateDown(indexBigger);
+       indexBigger = childRight;
     }
-      
+    else
+    {
+       indexBigger = childLeft;
+    }
+
+    if (container[indexHeap - 1] < container[indexBigger])
+    {
+
+       std::swap(container[indexHeap-1], container[indexBigger]);
+       valueChanged = true;
+       percolateDown(indexBigger+1);
+    }
     return valueChanged;
 }
 

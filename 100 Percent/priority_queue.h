@@ -13,15 +13,20 @@
  *    This will contain the class definition of:
  *        priority_queue          : A class that represents a Priority Queue
  * Author
- *    <your names here>
+ *    Jonathan Gunderson and Sulav Dahal
  ************************************************************************/
 
 #pragma once
 
 #include <cassert>
 #include "vector.h"
+#include <string>
 
 class TestPQueue;    // forward declaration for unit test class
+
+//struct heapInfo {
+//   bool valChanged = false;
+//};
 
 namespace custom
 {
@@ -114,7 +119,9 @@ private:
 template <class T>
 const T & priority_queue <T> :: top() const
 {
-    return container.front();
+   if(container.empty())
+      throw "std:out_of_range";
+   return container.front();
 }
 
 /**********************************************
@@ -124,7 +131,14 @@ const T & priority_queue <T> :: top() const
 template <class T>
 void priority_queue <T> :: pop()
 {
-    
+   if (container.empty())
+      return;
+
+   std::swap(container[0], container[container.size()-1]);
+
+   container.pop_back();
+   percolateDown(1);
+   
 }
 
 /*****************************************
@@ -134,19 +148,28 @@ void priority_queue <T> :: pop()
 template <class T>
 void priority_queue <T> :: push(const T & t)
 {
-    container.push_back(t);
-    std:: cout << container.size() << std::endl;
-    size_t parentIndex = (size_t) (container.size()-1)/ 2;
-    while(parentIndex !=0)
+   container.push_back(t);
+   size_t parentIndex = (size_t) (container.size()-1)/ 2;
+   parentIndex++;
+   while(parentIndex !=0 && percolateDown(parentIndex))
     {
-        percolateDown(parentIndex);
-        parentIndex = (size_t) parentIndex / 2;
+      percolateDown(parentIndex);
+      parentIndex = (size_t) (parentIndex) / 2;
     }
 
 }
 template <class T>
 void priority_queue <T> :: push(T && t)
 {
+   container.push_back(std::move(t));
+   size_t parentIndex = (size_t)(container.size() - 1) / 2;
+   parentIndex++;
+   
+   while(parentIndex !=0 && percolateDown(parentIndex))
+    {
+      percolateDown(parentIndex);
+      parentIndex = (size_t) (parentIndex) / 2;
+    }
 }
 
 /************************************************
@@ -158,30 +181,38 @@ void priority_queue <T> :: push(T && t)
 template <class T>
 bool priority_queue <T> :: percolateDown(size_t indexHeap)
 {
-    bool  valueChanged = false;
-    if(indexHeap >= container.size()-1)
-        return 0;
-    
-    size_t childLeft = 2 * indexHeap +1 ;
-    size_t childRight = childLeft + 2;
-    
-    size_t indexBigger = 0;
-    // Find Bigger Child
-    
-    if(container[childLeft] > container[childRight])
-        indexBigger = childLeft;
-    else
-        indexBigger = childRight;
-    
-    if(container[indexHeap] < container[indexBigger])
-    {
-        std:: cout << container[indexHeap] << container[indexBigger] <<std:: endl;
-        std:: swap(container[indexHeap], container[indexBigger]);
-        valueChanged = true;
-        percolateDown(indexBigger);
-    }
-      
-    return valueChanged;
+   indexHeap -= 1;
+   
+   
+   bool valueChanged = false;
+   if(indexHeap+1 >= container.size()-1)
+       return 0;
+
+
+   int childLeft = (int) indexHeap * 2 + 1;
+
+   int childRight = (int)indexHeap*2  +2 <= (int) container.size() -1 ? (int)indexHeap*2 +2 : -1;
+
+
+   int indexBigger = 0;
+   // Find Bigger Child
+   if (childRight != -1 && container[childLeft] < container[childRight])
+   {
+      indexBigger = childRight;
+   }
+   else
+   {
+      indexBigger = childLeft;
+   }
+
+   if (container[indexHeap] < container[indexBigger])
+   {
+
+      std::swap(container[indexHeap], container[indexBigger]);
+      valueChanged = true;
+      percolateDown(indexBigger+1);
+   }
+   return valueChanged;
 }
 
 

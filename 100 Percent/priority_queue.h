@@ -114,7 +114,9 @@ private:
 template <class T>
 const T & priority_queue <T> :: top() const
 {
-    return container.front();
+
+      return container.front();
+
 }
 
 /**********************************************
@@ -124,7 +126,18 @@ const T & priority_queue <T> :: top() const
 template <class T>
 void priority_queue <T> :: pop()
 {
-    
+   if (container.empty())
+      return;
+
+   std::swap(container[0], container[container.size()-1]);
+
+
+   container.pop_back();
+   percolateDown(1);
+   
+
+
+
 }
 
 /*****************************************
@@ -139,14 +152,22 @@ void priority_queue <T> :: push(const T & t)
     size_t parentIndex = (size_t) (container.size()-1)/ 2;
     while(parentIndex !=0)
     {
-        percolateDown(parentIndex);
-        parentIndex = (size_t) parentIndex / 2;
+        percolateDown(parentIndex+1);
+        parentIndex = (size_t) (parentIndex) / 2;
     }
 
 }
 template <class T>
 void priority_queue <T> :: push(T && t)
 {
+   container.push_back(t);
+   std::cout << container.size() << std::endl;
+   size_t parentIndex = (size_t)(container.size() - 1) / 2;
+   while (parentIndex != 0)
+   {
+      percolateDown(parentIndex+1);
+      parentIndex = (size_t)parentIndex / 2;
+   }
 }
 
 /************************************************
